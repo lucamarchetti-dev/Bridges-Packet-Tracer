@@ -1,0 +1,97 @@
+.details-panel {
+  width: 280px;
+  min-width: 280px;
+  background: white;
+  border-left: 1px solid #e2e8f0;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.details-header h2 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #718096;
+}
+
+.details-readonly {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.details-readonly dt {
+  color: #718096;
+}
+
+.details-readonly dd {
+  margin: 0;
+}
+
+.id-value {
+  font-family: monospace;
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.details-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.details-form input,
+.details-form select {
+  padding: 6px 8px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.details-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.details-actions button {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e0;
+  background: #3182ce;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.details-actions button.danger {
+  background: white;
+  color: #c53030;
+  border-color: #c53030;
+}

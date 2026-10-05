@@ -1,0 +1,74 @@
+.device-node {
+  position: absolute;
+  /* Il punto x/y del dispositivo corrisponde al CENTRO del nodo, quindi lo
+     ricentriamo con una traslazione del 50% della sua stessa dimensione. */
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none; /* necessario perché i Pointer Events gestiscano anche il touch */
+  z-index: 2;
+}
+
+.device-node:active {
+  cursor: grabbing;
+}
+
+.device-shape {
+  width: 56px;
+  height: 56px;
+  background: #ffffff;
+  border: 3px solid #4a5568;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* PC = quadrato (bordi vivi, nessun arrotondamento) */
+.type-pc .device-shape {
+  border-radius: 4px;
+}
+
+/* Switch = rettangolo, più largo che alto */
+.type-switch .device-shape {
+  width: 78px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+/* Router = cerchio */
+.type-router .device-shape {
+  border-radius: 50%;
+}
+
+/* Colore in base allo stato operativo (indipendente dal tipo/forma):
+   se lo stato non è impostato, resta il colore neutro di default sopra. */
+.status-online .device-shape {
+  background: #48bb78;
+  border-color: #2f855a;
+}
+
+.status-offline .device-shape {
+  background: #f56565;
+  border-color: #c53030;
+}
+
+.device-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2d3748;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Dispositivo selezionato: alone evidenziato (requisito sez. 11).
+   Nota: non tocco più border-color qui, altrimenti "coprirebbe" il colore
+   di stato (verde/rosso) impostato sopra: l'alone blu resta visibile e
+   distinguibile sopra qualunque colore di stato. */
+.device-node.selected .device-shape {
+  box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.35);
+}

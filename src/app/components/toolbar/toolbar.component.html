@@ -1,0 +1,41 @@
+<header class="toolbar">
+  <h1>BridgesPT</h1>
+
+  <div class="toolbar-group">
+    <button
+      type="button"
+      class="mode-btn"
+      [class.active]="topology.mode() === 'edit'"
+      (click)="setEditMode()"
+    >
+      Edit
+    </button>
+    <button
+      type="button"
+      class="mode-btn"
+      [class.active]="topology.mode() === 'connect'"
+      (click)="setConnectMode()"
+    >
+      Connect
+    </button>
+  </div>
+
+  <div class="toolbar-group">
+    <button type="button" (click)="addPc()">+ PC</button>
+    <button type="button" (click)="addSwitch()">+ Switch</button>
+    <button type="button" (click)="addRouter()">+ Router</button>
+  </div>
+
+  <div class="toolbar-group">
+    <button type="button" (click)="saveTopology()">Salva topologia</button>
+    <button type="button" (click)="loadTopology()">Carica topologia</button>
+    <button type="button" class="danger" (click)="clearTopology()">Cancella topologia</button>
+  </div>
+
+  <span class="mode-indicator">
+    Modalità attiva: <strong>{{ topology.mode() === 'edit' ? 'Edit' : 'Connect' }}</strong>
+    @if (topology.mode() === 'connect' && topology.selectedDeviceId()) {
+      <span class="hint"> — ora seleziona il dispositivo di destinazione</span>
+    }
+  </span>
+</header>

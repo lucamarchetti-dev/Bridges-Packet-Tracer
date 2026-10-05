@@ -1,0 +1,27 @@
+<!-- Nota: dentro il template di UN componente SVG, Angular non "eredita"
+     automaticamente il contesto di namespace dal punto in cui viene usato.
+     Bisogna quindi prefissare gli elementi con "svg:" (es. svg:line) perché
+     il compilatore li riconosca come elementi SVG e non come tag sconosciuti. -->
+
+<!-- Hitbox: linea "spessa" ma trasparente, serve solo a rendere facile
+     il doppio click per eliminare la connessione (una linea da 2px sarebbe
+     troppo difficile da colpire con precisione). -->
+<svg:line
+  [attr.x1]="line.x1"
+  [attr.y1]="line.y1"
+  [attr.x2]="line.x2"
+  [attr.y2]="line.y2"
+  class="connection-hitbox"
+  (dblclick)="onRemove()"
+>
+  <svg:title>Doppio click per eliminare la connessione</svg:title>
+</svg:line>
+
+<!-- Linea effettivamente visibile -->
+<svg:line
+  [attr.x1]="line.x1"
+  [attr.y1]="line.y1"
+  [attr.x2]="line.x2"
+  [attr.y2]="line.y2"
+  class="connection-line"
+></svg:line>

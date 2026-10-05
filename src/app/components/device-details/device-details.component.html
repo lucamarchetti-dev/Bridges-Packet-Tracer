@@ -1,0 +1,49 @@
+@if (device(); as d) {
+  <aside class="details-panel">
+    <div class="details-header">
+      <h2>Dettaglio dispositivo</h2>
+      <button type="button" class="close-btn" (click)="close()" aria-label="Chiudi pannello">✕</button>
+    </div>
+
+    <dl class="details-readonly">
+      <dt>Tipo</dt>
+      <dd>{{ d.type }}</dd>
+      <dt>Posizione</dt>
+      <dd>x: {{ d.x | number: '1.0-0' }}, y: {{ d.y | number: '1.0-0' }}</dd>
+      <dt>ID</dt>
+      <dd class="id-value">{{ d.id }}</dd>
+    </dl>
+
+    <form class="details-form" (submit)="$event.preventDefault(); save()">
+      <label>
+        Nome
+        <input type="text" name="name" [(ngModel)]="name" />
+      </label>
+
+      <label>
+        Indirizzo IP
+        <input type="text" name="ip" [(ngModel)]="ip" placeholder="es. 192.168.1.1" />
+      </label>
+
+      <label>
+        Hostname
+        <input type="text" name="hostname" [(ngModel)]="hostname" placeholder="es. router-main" />
+      </label>
+
+      <label>
+        Stato
+        <select name="status" [(ngModel)]="status">
+          <option value="">Non impostato</option>
+          @for (opt of statusOptions; track opt) {
+            <option [value]="opt">{{ opt }}</option>
+          }
+        </select>
+      </label>
+
+      <div class="details-actions">
+        <button type="submit">Salva modifiche</button>
+        <button type="button" class="danger" (click)="remove()">Elimina dispositivo</button>
+      </div>
+    </form>
+  </aside>
+}

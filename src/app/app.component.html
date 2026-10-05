@@ -1,0 +1,15 @@
+<div class="app-shell">
+  <app-toolbar></app-toolbar>
+
+  @if (topology.notification(); as note) {
+    <div class="notification" [class.error]="note.type === 'error'" [class.info]="note.type === 'info'">
+      <span>{{ note.message }}</span>
+      <button type="button" (click)="dismissNotification()" aria-label="Chiudi messaggio">✕</button>
+    </div>
+  }
+
+  <main class="main-area">
+    <app-network-canvas class="canvas-area"></app-network-canvas>
+    <app-device-details></app-device-details>
+  </main>
+</div>

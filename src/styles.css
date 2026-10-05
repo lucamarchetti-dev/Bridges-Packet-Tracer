@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Linea di connessione visibile */
+.connection-line {
+  stroke: #4a5568;
+  stroke-width: 2;
+}
+
+/* Hitbox invisibile ma "cliccabile" (solo lungo il tratto, non l'intera area)
+   usata per il doppio click di eliminazione connessione. */
+.connection-hitbox {
+  stroke: transparent;
+  stroke-width: 14;
+  pointer-events: stroke;
+  cursor: pointer;
+}

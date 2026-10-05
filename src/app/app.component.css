@@ -1,0 +1,42 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.notification.error {
+  background: #fed7d7;
+  color: #822727;
+}
+
+.notification.info {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.notification button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  color: inherit;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  min-height: 0; /* permette al figlio flex di scrollare/riempire correttamente */
+}
+
+.canvas-area {
+  flex: 1;
+  min-width: 0;
+}

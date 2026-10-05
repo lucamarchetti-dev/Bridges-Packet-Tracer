@@ -1,0 +1,71 @@
+<div
+  class="canvas"
+  [class.panning]="panning"
+  (click)="onCanvasClick()"
+  (wheel)="onWheel($event)"
+  (pointerdown)="onBackgroundPointerDown($event)"
+  (pointermove)="onBackgroundPointerMove($event)"
+  (pointerup)="onBackgroundPointerUp($event)"
+  (pointercancel)="onBackgroundPointerUp($event)"
+>
+  <!--
+    Questo div interno viene spostato e scalato via CSS transform.
+    translate(...) scale(...), in QUESTO ordine, applica prima lo zoom e poi
+    sposta il risultato nello spazio del contenitore padre (.canvas, mai
+    scalato): per questo il pan può lavorare in pixel "schermo" puri, senza
+    bisogno di dividerli per il livello di zoom.
+    transform-origin: 0 0 (nel CSS) fa sì che lo zoom "cresca" a partire
+    dall'angolo in alto a sinistra del contenuto, invece che dal centro.
+
+    NOTA: gli ascoltatori pointerdown/move/up/cancel per il PAN sono
+    agganciati a .canvas (il contenitore ESTERNO, sopra), non più qui.
+    .canvas-content viene spostato dal pan stesso, quindi dopo un primo
+    trascinamento non copre più l'intera area visibile — un ascoltatore
+    agganciato qui "perderebbe" i punti scoperti. .canvas invece non si
+    sposta mai e copre sempre tutta l'area visibile del canvas.
+  -->
+  <div
+    class="canvas-content"
+    [style.transform]="
+      'translate(' + viewport.panX() + 'px, ' + viewport.panY() + 'px) scale(' + viewport.zoom() + ')'
+    "
+  >
+    <!-- Un unico <svg> per TUTTE le connessioni: pointer-events:none sul layer
+         intero (vedi css) fa sì che i click "passino attraverso" verso il
+         canvas o i dispositivi, tranne che sulle linee stesse. -->
+    <svg class="connections-layer">
+      @for (line of topology.connectionLines(); track line.id) {
+        <g appConnectionLine [line]="line" (removeRequested)="onRemoveConnection($event)"></g>
+      }
+    </svg>
+
+    @for (device of topology.devices(); track device.id) {
+      <app-device-node [device]="device" />
+    }
+  </div>
+
+  @if (topology.devices().length === 0) {
+    <p class="empty-hint">
+      Il canvas è vuoto. Usa i pulsanti "+ PC / + Switch / + Router" nella
+      toolbar per aggiungere il primo dispositivo.
+    </p>
+  }
+
+  <!--
+    Pannello di zoom flottante: sta FUORI da .canvas-content apposta, così
+    non viene scalato/spostato insieme al resto (sarebbe assurdo se i suoi
+    stessi pulsanti si rimpicciolissero quando si zooma indietro). Resta
+    sempre nello stesso punto dello schermo, sopra il canvas.
+    (click)="$event.stopPropagation()" sul contenitore evita che un click su
+    questi pulsanti "arrivi" fino a .canvas e deselezioni il dispositivo
+    attivo (il click, senza questo, risalirebbe fino a onCanvasClick()).
+  -->
+  <div class="zoom-controls" role="group" aria-label="Controlli zoom canvas" (click)="$event.stopPropagation()">
+    <button type="button" (click)="viewport.zoomIn()" aria-label="Aumenta zoom">＋</button>
+    <span class="zoom-level">{{ viewport.zoomPercentage() }}%</span>
+    <button type="button" (click)="viewport.zoomOut()" aria-label="Riduci zoom">－</button>
+    <button type="button" class="reset-btn" (click)="viewport.resetView()" aria-label="Reset vista">
+      Reset
+    </button>
+  </div>
+</div>

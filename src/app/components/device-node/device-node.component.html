@@ -1,0 +1,22 @@
+<div
+  class="device-node"
+  [class.selected]="isSelected()"
+  [class.type-pc]="device.type === 'PC'"
+  [class.type-switch]="device.type === 'Switch'"
+  [class.type-router]="device.type === 'Router'"
+  [class.status-online]="device.status === 'Online'"
+  [class.status-offline]="device.status === 'Offline'"
+  [style.left.px]="device.x"
+  [style.top.px]="device.y"
+  [attr.title]="device.type + ': ' + device.name"
+  (pointerdown)="onPointerDown($event)"
+  (pointermove)="onPointerMove($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointercancel)="onPointerUp($event)"
+  (click)="onClick($event)"
+  (contextmenu)="onContextMenu($event)"
+>
+  <!-- La forma vera e propria: quadrato, rettangolo o cerchio via CSS (vedi .css) -->
+  <div class="device-shape"></div>
+  <span class="device-label">{{ device.name }}</span>
+</div>

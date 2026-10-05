@@ -1,0 +1,135 @@
+.canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* "hidden" invece di "auto": ora che esiste il pan manuale (trascinando lo
+     sfondo), non vogliamo anche la scrollbar nativa del browser, che
+     "combatterebbe" con il transform applicato a .canvas-content producendo
+     un doppio sistema di navigazione scoordinato. Il pan è l'unico modo per
+     navigare il contenuto oltre i bordi visibili. */
+  overflow: hidden;
+  background-color: #f7fafc;
+  background-image: radial-gradient(#cbd5e0 1px, transparent 1px);
+  background-size: 24px 24px;
+  /* .canvas è il contenitore che riceve davvero gli ascoltatori del pan ed è
+     l'unico che copre sempre l'intera area visibile, qualunque sia il pan
+     corrente: per questo l'evento touch va bloccato qui. */
+  touch-action: none;
+  cursor: grab;
+}
+
+.canvas.panning {
+  cursor: grabbing;
+}
+
+/*
+  Cursore grab/grabbing esplicito ANCHE su .canvas-content, invece di
+  affidarsi alla sola ereditarietà CSS da .canvas: così il cursore "a
+  manina" copre davvero tutta l'area in modo esplicito, non accidentale.
+  Elementi più specifici sopra (nodo dispositivo, linea di connessione,
+  pulsanti di zoom) hanno un proprio cursore dedicato e continuano a
+  vincere su questo, grazie alla maggiore specificità delle loro regole.
+*/
+.canvas-content {
+  position: absolute;
+  inset: 0;
+  /* Punto fisso rispetto al quale avviene l'ingrandimento/rimpicciolimento:
+     con 0 0 (angolo in alto a sinistra) lo zoom "si espande" verso il basso
+     a destra, invece che dal centro del canvas. */
+  transform-origin: 0 0;
+  cursor: grab;
+}
+
+.canvas.panning .canvas-content {
+  cursor: grabbing;
+}
+
+.connections-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Il layer nel suo complesso non deve bloccare i click su canvas/dispositivi. */
+  pointer-events: none;
+  z-index: 1;
+  /*
+    FONDAMENTALE: un elemento <svg> ritaglia per default tutto ciò che esce
+    dal proprio riquadro (width/height), esattamente come farebbe un
+    overflow: hidden su un <div>. I dispositivi sono <div> posizionati in
+    absolute: non hanno questo limite e restano visibili ovunque si trovino
+    sul canvas logico. Le <line> dentro questo <svg>, invece, venivano
+    "tagliate" non appena un dispositivo veniva spostato oltre i bordi
+    nominali del canvas (tipicamente trascinando a zoom ridotto, dove un
+    piccolo movimento del mouse corrisponde a un grande spostamento in
+    coordinate logiche). "overflow: visible" disattiva questo ritaglio: la
+    linea viene disegnata fino alle coordinate effettive del dispositivo,
+    qualunque esse siano.
+  */
+  overflow: visible;
+}
+
+.empty-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #718096;
+  font-size: 14px;
+  text-align: center;
+  max-width: 280px;
+  pointer-events: none;
+}
+
+/*
+  Pannello di zoom: posizionato "sopra" il canvas (in senso di sovrapposizione
+  visiva, z-index più alto di dispositivi e connessioni) e a sinistra,
+  disposto in verticale (flex-direction: column), come i controlli di zoom
+  tipici di un'app di mappe.
+*/
+.zoom-controls {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding: 6px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.zoom-controls button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background: #f7fafc;
+  color: #2d3748;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.zoom-controls button:hover {
+  background: #edf2f7;
+}
+
+.zoom-controls .zoom-level {
+  text-align: center;
+  font-size: 11px;
+  color: #4a5568;
+  /* Evita che la larghezza del pannello "balli" passando da "70%" a "100%". */
+  font-variant-numeric: tabular-nums;
+}
+
+.zoom-controls .reset-btn {
+  width: auto;
+  height: auto;
+  margin-top: 2px;
+  padding: 4px 2px;
+  font-size: 10px;
+}
